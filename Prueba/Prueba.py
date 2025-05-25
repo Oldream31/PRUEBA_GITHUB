@@ -1,4 +1,5 @@
 import tkinter as tk
+
 class Calculadora:
     def __init__(self, root):
         self.root = root
@@ -18,6 +19,7 @@ class Calculadora:
         self.entrada.grid(row=0, column=0, columnspan=4, sticky="nsew", padx=5, pady=5)
 
         # Botones
+        self.botones = []  # Lista para almacenar los botones
         botones = [
             ("7", "numero"), ("8", "numero"), ("9", "numero"), ("/", "operacion"),
             ("4", "numero"), ("5", "numero"), ("6", "numero"), ("*", "operacion"),
@@ -33,9 +35,12 @@ class Calculadora:
             else:  # especial
                 color = "#ffcccb"
 
-            tk.Button(
-                root, text=texto, font=("Arial", 18), bg=color, command=lambda b=texto: self.click_boton(b)
-            ).grid(row=(i // 4) + 1, column=i % 4, sticky="nsew", padx=5, pady=5)
+            boton = tk.Button(
+                root, text=texto, font=("Arial", 18), bg=color, fg=self.estilo_claro["fg"],
+                command=lambda b=texto: self.click_boton(b)
+            )
+            boton.grid(row=(i // 4) + 1, column=i % 4, sticky="nsew", padx=5, pady=5)
+            self.botones.append(boton)  # Guardar el botón en la lista
 
         # Botón de modo oscuro
         self.boton_modo = tk.Button(
@@ -75,6 +80,9 @@ class Calculadora:
         self.entrada.configure(bg=estilo["bg"], fg=estilo["fg"], insertbackground=estilo["fg"])
         self.boton_modo.configure(bg=estilo["bg"], fg=estilo["fg"], text="Modo Claro" if self.modo_oscuro else "Modo Oscuro")
 
+        # Actualizar colores de los botones
+        for boton in self.botones:
+            boton.configure(fg=estilo["fg"])
 
 if __name__ == "__main__":
     root = tk.Tk()
