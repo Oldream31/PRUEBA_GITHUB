@@ -11,8 +11,8 @@ class Calculadora:
         self.modo_oscuro = False
 
         # Estilo
-        self.estilo_claro = {"bg": "white", "fg": "black"}
-        self.estilo_oscuro = {"bg": "#2e2e2e", "fg": "white"}
+        self.estilo_claro = {"bg": "#ffefd5", "fg": "#000000"}  # Fondo amarillo claro
+        self.estilo_oscuro = {"bg": "#2e2e2e", "fg": "#ffffff"}  # Fondo oscuro
 
         # Campo de entrada
         self.entrada = tk.Entry(root, font=("Arial", 24), justify="right", bd=10)
@@ -29,11 +29,11 @@ class Calculadora:
 
         for i, (texto, tipo) in enumerate(botones):
             if tipo == "numero":
-                color = "#f0f0f0"
+                color = "#ffb6c1"  # Rosa claro
             elif tipo == "operacion":
-                color = "#d3d3d3"
+                color = "#87ceeb"  # Azul claro
             else:  # especial
-                color = "#ffcccb"
+                color = "#ffa07a"  # Naranja claro
 
             boton = tk.Button(
                 root, text=texto, font=("Arial", 18), bg=color, fg=self.estilo_claro["fg"],
@@ -53,6 +53,9 @@ class Calculadora:
             root.grid_rowconfigure(i, weight=1)
         for i in range(4):  # 4 columnas
             root.grid_columnconfigure(i, weight=1)
+
+        # Vincular el evento de redimensionamiento
+        self.root.bind("<Configure>", self.ajustar_fuente)
 
         self.actualizar_tema()
 
@@ -84,29 +87,15 @@ class Calculadora:
         for boton in self.botones:
             boton.configure(fg=estilo["fg"])
 
+    def ajustar_fuente(self, event):
+        # Calcular el tamaño de la fuente basado en el ancho de la ventana
+        nuevo_tamano = max(12, int(self.root.winfo_width() / 25))
+        self.entrada.configure(font=("Arial", nuevo_tamano))
+        for boton in self.botones:
+            boton.configure(font=("Arial", nuevo_tamano))
+        self.boton_modo.configure(font=("Arial", max(10, nuevo_tamano - 4)))
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = Calculadora(root)
-    root.mainloop()# Calculadora con Modo Oscuro en Python
-
-Este proyecto es una calculadora gráfica desarrollada en Python utilizando la biblioteca `tkinter`. La aplicación permite realizar operaciones matemáticas básicas y alternar entre un modo claro y un modo oscuro para mejorar la experiencia del usuario.
-
-## Características
-
-- **Operaciones básicas**: Suma, resta, multiplicación y división.
-- **Modo Oscuro/Claro**: Cambia entre temas visuales para adaptarse a las preferencias del usuario.
-- **Interfaz gráfica**: Fácil de usar gracias a `tkinter`.
-
-## Requisitos previos
-
-Asegúrate de tener instalado lo siguiente:
-
-- Python 3.x
-- Biblioteca estándar `tkinter` (incluida en la mayoría de las instalaciones de Python)
-
-## Instalación y ejecución
-
-1. Clona este repositorio o descarga los archivos del proyecto.
-   ```bash
-   git clone https://github.com/tu_usuario/calculadora-modo-oscuro.git
-   cd calculadora-modo-oscuro
+    root.mainloop()
